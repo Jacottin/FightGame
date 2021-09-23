@@ -12,7 +12,7 @@ namespace FightGame
             Random rng = new Random();
             bool gameRunning = true;
             Character player = new Healer("Joueur");
-            Character cpu;
+            Character cpu = new Healer("Ordinateur");
             int turn = 1;
 
             // Character select
@@ -70,10 +70,10 @@ namespace FightGame
                 Console.WriteLine("+--------+");
                 Console.WriteLine("");
 
-                Console.WriteLine(player._className);
+                Console.WriteLine(player.getClassName());
                 //Console.WriteLine($"[{player._lifePoints} HP]");
                 Console.WriteLine("");
-                Console.WriteLine(cpu._className);
+                Console.WriteLine(cpu.getClassName());
                 //Console.WriteLine($"[{cpu._lifePoints} HP]");
                 Console.WriteLine("");
 
@@ -110,12 +110,12 @@ namespace FightGame
                 }
 
                 Console.WriteLine("Vous"); // TODO : gérer les annonces d'actions
-                Console.WriteLine($"Le {player._className} ");
+                Console.WriteLine($"Le {player.getClassName()} ");
 
                 player.Update(cpu);
                 cpu.Update(player);
 
-                if (player._lifePoints == 0 || cpu._lifePoints)
+                if (player.getLife() <= 0 || cpu.getLife() <= 0)
                     gameRunning = false;
             }
         }

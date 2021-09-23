@@ -43,6 +43,10 @@ namespace FightGame.Characters {
             return _userName;
         }
 
+        public int getLife() {
+            return _lifePoints;
+        }
+
         protected abstract void _SpecialCapacity(Character other);
     }
 }
