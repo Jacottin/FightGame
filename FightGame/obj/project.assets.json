@@ -8,19 +8,19 @@
     "net5.0": []
   },
   "packageFolders": {
-    "C:\\Users\\romte\\.nuget\\packages\\": {}
+    "C:\\Users\\TNtube\\.nuget\\packages\\": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "D:\\ENJMIN\\Notions C#\\FightGame\\FightGame\\FightGame.csproj",
+      "projectUniqueName": "D:\\dev\\RiderProjects\\FightGame\\FightGame\\FightGame.csproj",
       "projectName": "FightGame",
-      "projectPath": "D:\\ENJMIN\\Notions C#\\FightGame\\FightGame\\FightGame.csproj",
-      "packagesPath": "C:\\Users\\romte\\.nuget\\packages\\",
-      "outputPath": "D:\\ENJMIN\\Notions C#\\FightGame\\FightGame\\obj\\",
+      "projectPath": "D:\\dev\\RiderProjects\\FightGame\\FightGame\\FightGame.csproj",
+      "packagesPath": "C:\\Users\\TNtube\\.nuget\\packages\\",
+      "outputPath": "D:\\dev\\RiderProjects\\FightGame\\FightGame\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
-        "C:\\Users\\romte\\AppData\\Roaming\\NuGet\\NuGet.Config"
+        "C:\\Users\\TNtube\\AppData\\Roaming\\NuGet\\NuGet.Config"
       ],
       "originalTargetFrameworks": [
         "net5.0"
@@ -58,7 +58,7 @@
             "privateAssets": "all"
           }
         },
-        "runtimeIdentifierGraphPath": "C:\\Users\\romte\\.dotnet\\sdk\\5.0.400\\RuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\5.0.400\\RuntimeIdentifierGraph.json"
       }
     }
   }

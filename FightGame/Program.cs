@@ -9,7 +9,7 @@ namespace FightGame {
 
             Random rng = new Random();
             bool gameRunning = true;
-            Character player;
+            Character player = new Healer("Joueur");;
             Character cpu;
             int turn = 1;
             
@@ -34,14 +34,14 @@ namespace FightGame {
                     //player = new Tank();
                     break;
                 case "2":
-                    player = new Healer();
+                    // player = new Healer("Joueur");
                     break;
                 case "3":
                     //player = new Damager();
                     break;
             }
             
-            Console.WriteLine($"Vous avez choisi {player}.");
+            Console.WriteLine($"Vous avez choisi {player.getClassName()}.");
             
             // CPU character select
             
@@ -52,7 +52,7 @@ namespace FightGame {
                     //cpu = new Tank();
                     break;
                 case 2:
-                    cpu = new Healer();
+                    // cpu = new Healer();
                     break;
                 case 3:
                     //cpu = new Damager();
@@ -61,7 +61,7 @@ namespace FightGame {
             
             // Gameplay loop
 
-            while (gameRunning == true)
+            while (gameRunning)
             {
                 Console.WriteLine("+--------+");
                 Console.WriteLine($"Tour {turn}");
