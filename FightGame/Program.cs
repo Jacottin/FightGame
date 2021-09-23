@@ -9,7 +9,7 @@ namespace FightGame {
 
             Random rng = new Random();
             bool gameRunning = true;
-            Character player = new Healer("Joueur");;
+            Character player = new Healer("Joueur");
             Character cpu;
             int turn = 1;
             
