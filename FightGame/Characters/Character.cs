@@ -2,6 +2,8 @@
 
 namespace FightGame.Characters {
     public abstract class Character {
+        protected string _className;
+        protected string _userName;
         protected int _lifePoints;
         protected int _defendPoints;
         protected int _defaultAttackPoints;
@@ -31,6 +33,14 @@ namespace FightGame.Characters {
 
         public void SpecialCapacity() {
             _specialCapacityUsed = true;
+        }
+
+        public string getClassName() {
+            return _className;
+        }
+
+        public string getUserName() {
+            return _userName;
         }
 
         protected abstract void _SpecialCapacity(Character other);

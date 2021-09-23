@@ -1,7 +1,9 @@
 ﻿namespace FightGame.Characters {
     public class Healer : Character {
 
-        public Healer() {
+        public Healer(string playerName) {
+            _className = "Healer";
+            _userName = playerName;
             _lifePoints = 4;
             _defendPoints = 0;
             _attackPoints = 1;
