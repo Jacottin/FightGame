@@ -11,9 +11,11 @@ namespace FightGameInterface {
         private Texture2D[] _tankSprites;
 
         private RenderTarget2D _scaleupTarget;
-        const int RENDER_TARGET_WIDTH = 640;
-        const int RENDER_TARGET_HEIGHT = 360;
+        const int RENDER_TARGET_WIDTH = 420;
+        const int RENDER_TARGET_HEIGHT = 236;
         private float _upScaleAmount;
+
+        private int animIndex = 0;
 
         public MainGame() {
             _graphics = new GraphicsDeviceManager(this);
@@ -39,12 +41,12 @@ namespace FightGameInterface {
             // create 1x1 texture for line drawing
             _lineText = new Texture2D(GraphicsDevice, 1, 1);
             _lineText.SetData(
-                new [] { Color.White });// fill the texture with white
+                new [] { Color.White }); // fill the texture with white
 
             _tankSprites = new[] {
-                Content.Load<Texture2D>("assets/tank1"),
+                Content.Load<Texture2D>("assets/tank3"),
                 Content.Load<Texture2D>("assets/tank2"),
-                Content.Load<Texture2D>("assets/tank3")
+                Content.Load<Texture2D>("assets/tank1")
             };
             
             _scaleupTarget  = new RenderTarget2D(GraphicsDevice, RENDER_TARGET_WIDTH, RENDER_TARGET_HEIGHT);
@@ -59,6 +61,7 @@ namespace FightGameInterface {
                 Exit();
 
             // TODO: Add your update logic here
+            animIndex++;
 
             base.Update(gameTime);
         }
@@ -67,17 +70,16 @@ namespace FightGameInterface {
             GraphicsDevice.Clear(Color.CornflowerBlue);
 
             // TODO: Add your drawing code here
-
-            RenderTarget2D rt = new RenderTarget2D(GraphicsDevice, 200, 200);
             
             GraphicsDevice.SetRenderTarget(_scaleupTarget);
-            GraphicsDevice.Clear(Color.SeaGreen);
+            GraphicsDevice.Clear(Color.CornflowerBlue);
             _spriteBatch.Begin(
                 SpriteSortMode.BackToFront,
                 BlendState.AlphaBlend
             );
             
-            _spriteBatch.Draw(_tankSprites[0], new Vector2(20, 20), Color.White);
+            DrawChoice();
+            
             DrawInterface(Color.White);
             _spriteBatch.End();
             
@@ -87,9 +89,7 @@ namespace FightGameInterface {
             _spriteBatch.Begin(
                 SpriteSortMode.Texture,
                 BlendState.AlphaBlend,
-                SamplerState.PointClamp,
-                null,
-                null);
+                SamplerState.PointClamp );
             _spriteBatch.Draw(_scaleupTarget, Vector2.Zero, null, Color.White, 0.0f, Vector2.Zero, _upScaleAmount, SpriteEffects.None, 0.0f);
             _spriteBatch.End();
             
@@ -116,6 +116,17 @@ namespace FightGameInterface {
                 new Vector2(bottomRight.X, bottomRight.Y - (bottomRight - topRight).Y * 0.3f),
                 color, lineWidth
                 );
+        }
+        private void DrawChoice() {
+            Texture2D actSprite = _tankSprites[animIndex / 10 % 3];
+            
+            _spriteBatch.Draw(actSprite, new Vector2(RENDER_TARGET_WIDTH / 4 - actSprite.Width / 2, 60), Color.White);
+
+            actSprite = _tankSprites[0];
+            _spriteBatch.Draw(actSprite, new Vector2(RENDER_TARGET_WIDTH / 4 * 2 - actSprite.Width / 2, 60), Color.White);
+            _spriteBatch.Draw(actSprite, new Vector2(RENDER_TARGET_WIDTH / 4 * 3 - actSprite.Width / 2, 60), Color.White);
+            
+            Utils.Draw.DrawAroundSprite(_spriteBatch, actSprite, _lineText, new Vector2(RENDER_TARGET_WIDTH / 4 - actSprite.Width / 2, 60));
         }
     }
 }
