@@ -26,7 +26,10 @@ namespace FightGame.Characters {
                 _SpecialCapacity(other);
                 _specialCapacityUsed = false;
             }
-            _lifePoints = _lifePoints + (_defendPoints - _damages);
+
+            if (_damages > 0) {
+                _lifePoints = _lifePoints + (_defendPoints - _damages);
+            }
             _damages = 0;
             _defendPoints = 0;
 
@@ -59,13 +62,13 @@ namespace FightGame.Characters {
         public void actionDisplay() {
             switch (_lastAction) {
                 case "attack":
-                    Console.WriteLine($"{_className} attaque !");
+                    Console.WriteLine($"{_userName} attaque !");
                     break;
                 case "defend":
-                    Console.WriteLine($"{_className} se défend !");
+                    Console.WriteLine($"{_userName} se défend !");
                     break;
                 case "special":
-                    Console.WriteLine($"{_className} utilise sa capacité spéciale !");
+                    Console.WriteLine($"{_userName} utilise sa capacité spéciale !");
                     break;
             }
         }
