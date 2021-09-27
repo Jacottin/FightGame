@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using FightGame.Characters;
 
 namespace FightGame
@@ -12,16 +13,14 @@ namespace FightGame
             Random rng = new Random();
             bool gameRunning = true;
             int turn = 1;
-            Character player;
-            Character cpu;
+            Character player = new Healer("Foo");
+            Character cpu = new Healer("Bar");
 
             Console.WriteLine("FightGame : Le jeu de combat incroyablement passionant");
             Console.WriteLine("Copyright Jacottin, Romaka & TNtube");
             Console.WriteLine("Publié par personne, mais peut-être un jour EA pour payer les updates \n");
             Console.WriteLine("Veuillez entrer votre nom.");
             string playerName = Console.ReadLine();
-            
-            player =  new Tank(playerName);
 
             // Character select
 
@@ -35,18 +34,24 @@ namespace FightGame
 
             string playerChoice = Console.ReadLine();
 
-            switch (playerChoice)
-            {
-                case "1":
-                    //player = new Tank();
-                    break;
-                case "2":
-                    //player = new Healer(playerName);
-                    break;
-                case "3":
-                    //player = new Damager();
-                    break;
+            while (!new List<string>{"1", "2", "3"}.Contains(playerChoice)) {
+                switch (playerChoice)
+                {
+                    case "1":
+                        player = new Tank(playerName);
+                        break;
+                    case "2":
+                        player = new Healer(playerName);
+                        break;
+                    case "3":
+                        player = new Damager(playerName);
+                        break;
+                    default:
+                        Console.WriteLine("Choisissez une classe valide");
+                        break;
+                }
             }
+            
 
             Console.WriteLine($"Vous avez choisi le {player.getClassName()}.");
 
@@ -56,17 +61,15 @@ namespace FightGame
             switch (cpuChoice)
             {
                 case 1:
-                    //cpu = new Tank("Ordinateur");
+                    cpu = new Tank("Ordinateur");
                     break;
                 case 2:
-                    //cpu = new Healer("Ordinateur");
+                    cpu = new Healer("Ordinateur");
                     break;
                 case 3:
-                    //cpu = new Damager("Ordinateur");
+                    cpu = new Damager("Ordinateur");
                     break;
             }
-
-            cpu = new Healer("Ordinateur");
             
             Console.WriteLine($"L'ordinateur a choisi le {cpu.getClassName()}.");
 
