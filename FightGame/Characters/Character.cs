@@ -10,7 +10,7 @@ namespace FightGame.Characters {
         protected int _attackPoints;
         protected int _damages;
         private bool _specialCapacityUsed;
-        protected string _lastAction;
+        private AttackType _lastAction;
         
         
         public void Attack(Character other) {
@@ -31,13 +31,14 @@ namespace FightGame.Characters {
                 _SpecialCapacity(other);
                 _specialCapacityUsed = false;
             }
+        }
 
+        public void ComputeDamages() {
             if (_damages > 0) {
                 _lifePoints = _lifePoints + (_defendPoints - _damages);
             }
             _damages = 0;
             _defendPoints = 0;
-
         }
 
         public void SpecialCapacity() {
@@ -56,23 +57,19 @@ namespace FightGame.Characters {
             return _lifePoints;
         }
         
-        public string getLastAction() {
-            return _lastAction;
-        }
-        
-        public void setLastAction(string action) {
+        public void setLastAction(AttackType action) {
             _lastAction = action;
         }
 
         public void actionDisplay() {
             switch (_lastAction) {
-                case "attack":
+                case AttackType.Attack:
                     Console.WriteLine($"{_userName} attaque !");
                     break;
-                case "defend":
+                case AttackType.Defend:
                     Console.WriteLine($"{_userName} se défend !");
                     break;
-                case "special":
+                case AttackType.Special:
                     Console.WriteLine($"{_userName} utilise sa capacité spéciale !");
                     break;
             }

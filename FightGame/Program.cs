@@ -99,17 +99,17 @@ namespace FightGame
                     {
                         case "1":
                             player.Attack(cpu);
-                            player.setLastAction("attack");
+                            player.setLastAction(AttackType.Attack);
                             validChoice = true;
                             break;
                         case "2":
                             player.Defend(cpu);
-                            player.setLastAction("defend");
+                            player.setLastAction(AttackType.Defend);
                             validChoice = true;
                             break;
                         case "3":
                             player.SpecialCapacity();
-                            player.setLastAction("special");
+                            player.setLastAction(AttackType.Special);
                             validChoice = true;
                             break;
                         default:
@@ -123,15 +123,15 @@ namespace FightGame
                 {
                     case 1:
                         cpu.Attack(player);
-                        cpu.setLastAction("attack");
+                        cpu.setLastAction(AttackType.Attack);
                         break;
                     case 2:
                         cpu.Defend(player);
-                        cpu.setLastAction("defend");
+                        cpu.setLastAction(AttackType.Defend);
                         break;
                     case 3:
                         cpu.SpecialCapacity();
-                        cpu.setLastAction("special");
+                        cpu.setLastAction(AttackType.Special);
                         break;
                 }
 
@@ -140,6 +140,8 @@ namespace FightGame
 
                 player.Update(cpu);
                 cpu.Update(player);
+                player.ComputeDamages();
+                cpu.ComputeDamages();
 
                 if (player.getLife() <= 0 || cpu.getLife() <= 0)
                     gameRunning = false;
