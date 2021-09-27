@@ -1,0 +1,16 @@
+C:\Users\pupit\Documents\GitHub\FightGame\FightGame\bin\Debug\net5.0\FightGame.exe
+C:\Users\pupit\Documents\GitHub\FightGame\FightGame\bin\Debug\net5.0\FightGame.deps.json
+C:\Users\pupit\Documents\GitHub\FightGame\FightGame\bin\Debug\net5.0\FightGame.runtimeconfig.json
+C:\Users\pupit\Documents\GitHub\FightGame\FightGame\bin\Debug\net5.0\FightGame.runtimeconfig.dev.json
+C:\Users\pupit\Documents\GitHub\FightGame\FightGame\bin\Debug\net5.0\FightGame.dll
+C:\Users\pupit\Documents\GitHub\FightGame\FightGame\bin\Debug\net5.0\ref\FightGame.dll
+C:\Users\pupit\Documents\GitHub\FightGame\FightGame\bin\Debug\net5.0\FightGame.pdb
+C:\Users\pupit\Documents\GitHub\FightGame\FightGame\obj\Debug\net5.0\FightGame.csproj.AssemblyReference.cache
+C:\Users\pupit\Documents\GitHub\FightGame\FightGame\obj\Debug\net5.0\FightGame.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\pupit\Documents\GitHub\FightGame\FightGame\obj\Debug\net5.0\FightGame.AssemblyInfoInputs.cache
+C:\Users\pupit\Documents\GitHub\FightGame\FightGame\obj\Debug\net5.0\FightGame.AssemblyInfo.cs
+C:\Users\pupit\Documents\GitHub\FightGame\FightGame\obj\Debug\net5.0\FightGame.csproj.CoreCompileInputs.cache
+C:\Users\pupit\Documents\GitHub\FightGame\FightGame\obj\Debug\net5.0\FightGame.dll
+C:\Users\pupit\Documents\GitHub\FightGame\FightGame\obj\Debug\net5.0\ref\FightGame.dll
+C:\Users\pupit\Documents\GitHub\FightGame\FightGame\obj\Debug\net5.0\FightGame.pdb
+C:\Users\pupit\Documents\GitHub\FightGame\FightGame\obj\Debug\net5.0\FightGame.genruntimeconfig.cache
