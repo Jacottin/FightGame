@@ -1,4 +1,5 @@
-﻿using Microsoft.Xna.Framework;
+﻿using System;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using FightGame.Characters;
@@ -19,17 +20,41 @@ namespace FightGameInterface {
         const int RENDER_TARGET_HEIGHT = 236;
         private float _upScaleAmount;
 
-        private GameState _gameState = GameState.PlayerChoice;
+        private GameState _gameState;
 
-        private Character _playerType = new Healer("Foobar");
+        private Character _player;
         
         // ---------- PlayerChoice ----------
-        private int _actualChoice = 1;
+        private int _actualChoice;
+        
+        // ------------ In Game -------------
+        private Character _npc;
+
+        private void ResetData() {
+            _gameState = GameState.PlayerChoice;
+            _player = new Healer("No choice");
+            _actualChoice = 1;
+            switch (new Random().Next(1, 4)) {
+                case 1:
+                    _npc = new Damager("NPC");
+                    break;
+                case 2:
+                    _npc = new Healer("NPC");
+                    break;
+                case 3:
+                    _npc = new Tank("NPC");
+                    break;
+                default:
+                    _npc = new Healer("DEFAULT NPC");
+                    break;
+            }
+        }
 
         public MainGame() {
             _graphics = new GraphicsDeviceManager(this);
             Content.RootDirectory = "Content";
             IsMouseVisible = true;
+            ResetData();
         }
 
         protected override void Initialize() {
@@ -95,13 +120,13 @@ namespace FightGameInterface {
                     if (state.IsKeyDown(Keys.Enter)) {
                         switch (_actualChoice) {
                             case 1:
-                                _playerType = new Healer("Foobar");
+                                _player = new Healer("Foobar");
                                 break;
                             case 2:
-                                _playerType = new Damager("Foobar");
+                                _player = new Damager("Foobar");
                                 break;
                             case 3:
-                                _playerType = new Tank("Foobar");
+                                _player = new Tank("Foobar");
                                 break;
                         }
                         _gameState++;
@@ -125,6 +150,11 @@ namespace FightGameInterface {
             switch (_gameState) {
                 case GameState.PlayerChoice:
                     DrawChoice(gameTime);
+                    DrawInterface(Color.White);
+                    break;
+                
+                case GameState.InGame:
+                    DrawInGame(gameTime);
                     DrawInterface(Color.White);
                     break;
             }
@@ -184,6 +214,40 @@ namespace FightGameInterface {
             
             Utils.Draw.DrawAroundSprite(_spriteBatch, actSprite, new Vector2(RENDER_TARGET_WIDTH / 4 * _actualChoice - actSprite.Width / 2, 60));
         }
+        
+        private void DrawInGame(GameTime gameTime) {
+            int index = (int)gameTime.TotalGameTime.TotalMilliseconds / 200 % 3;
+            Texture2D playerSprite = _healerSprites[0];
+            switch (_player.getClassName()) {
+                case "Healer":
+                    playerSprite = _healerSprites[index];
+                    break;
+                case "Damager":
+                    playerSprite = _damagerSprites[index];
+                    break;
+                case "Tank":
+                    playerSprite = _tankSprites[index];
+                    break;
+            }
+            
+            _spriteBatch.Draw(playerSprite, new Vector2(RENDER_TARGET_WIDTH / 5 - playerSprite.Width / 2, 80), Color.White);
+            
+            Texture2D npcSprite = _healerSprites[0];
+            switch (_npc.getClassName()) {
+                case "Healer":
+                    npcSprite = _healerSprites[index];
+                    break;
+                case "Damager":
+                    npcSprite = _damagerSprites[index];
+                    break;
+                case "Tank":
+                    npcSprite = _tankSprites[index];
+                    break;
+            }
+            _spriteBatch.Draw(npcSprite, new Rectangle(RENDER_TARGET_WIDTH / 5 * 4 - npcSprite.Width / 2, 30, 64, 64), 
+                null, Color.White, 0f,Vector2.Zero, SpriteEffects.FlipHorizontally, 0f);
+            
+        }
 
         private void DrawTexts() {
             
@@ -205,8 +269,6 @@ namespace FightGameInterface {
                     _spriteBatch.DrawString(_font80, output, new Vector2(_graphics.PreferredBackBufferWidth / 2 * 1, _graphics.PreferredBackBufferHeight * 0.12f) - fontOrigin, Color.Brown);
                     break;
             }
-            
-            
             _spriteBatch.End();
         }
     }
