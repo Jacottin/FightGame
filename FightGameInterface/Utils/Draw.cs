@@ -1,10 +1,12 @@
 using System;
+using System.Net.Mime;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
 namespace FightGameInterface.Utils {
     public static class Draw {
-        public static void DrawLine(SpriteBatch sb, Texture2D t,
+        public static Texture2D t;
+        public static void DrawLine(SpriteBatch sb,
                                     Vector2 start, Vector2 end, 
                                     Color color, int width = 1) {
             Vector2 edge = end - start;
@@ -27,7 +29,7 @@ namespace FightGameInterface.Utils {
                 0);
         }
 
-        public static void DrawAroundSprite(SpriteBatch sb, Texture2D sprite, Texture2D t, Vector2 pos) {
+        public static void DrawAroundSprite(SpriteBatch sb, Texture2D sprite, Vector2 pos) {
             const int lineWidth = 3;
             const int offset = 10;
             
@@ -36,10 +38,10 @@ namespace FightGameInterface.Utils {
             Vector2 bottomLeft = new (pos.X - offset, pos.Y + sprite.Height + offset);
             Vector2 bottomRight = new (pos.X + sprite.Width + offset, pos.Y + sprite.Height + offset);
 
-            DrawLine(sb, t, topLeft, topRight, Color.White, lineWidth);
-            DrawLine(sb, t, topRight, bottomRight, Color.White, lineWidth);
-            DrawLine(sb, t, bottomRight, bottomLeft, Color.White, lineWidth);
-            DrawLine(sb, t, bottomLeft, topLeft, Color.White, lineWidth);
+            DrawLine(sb, topLeft, topRight, Color.White, lineWidth);
+            DrawLine(sb, topRight, bottomRight, Color.White, lineWidth);
+            DrawLine(sb, bottomRight, bottomLeft, Color.White, lineWidth);
+            DrawLine(sb, bottomLeft, topLeft, Color.White, lineWidth);
             
         }
     }
