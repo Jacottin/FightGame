@@ -31,4 +31,7 @@
     <ItemGroup>
       <ProjectReference Include="..\FightGame\FightGame.csproj" />
     </ItemGroup>
+    <ItemGroup>
+      <Folder Include="Content\assets\font" />
+    </ItemGroup>
 </Project>

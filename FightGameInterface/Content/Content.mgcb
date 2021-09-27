@@ -121,3 +121,10 @@
 /processorParam:TextureFormat=Color
 /build:assets/tank3.png
 
+#begin Font80.spritefont
+/importer:FontDescriptionImporter
+/processor:FontDescriptionProcessor
+/processorParam:PremultiplyAlpha=True
+/processorParam:TextureFormat=Compressed
+/build:Font80.spritefont
+

@@ -12,6 +12,8 @@ namespace FightGameInterface {
         private Texture2D[] _damagerSprites;
         private Texture2D[] _healerSprites;
 
+        private SpriteFont _font80;
+
         private RenderTarget2D _scaleUpTarget;
         const int RENDER_TARGET_WIDTH = 420;
         const int RENDER_TARGET_HEIGHT = 236;
@@ -68,6 +70,8 @@ namespace FightGameInterface {
             
             _scaleUpTarget  = new RenderTarget2D(GraphicsDevice, RENDER_TARGET_WIDTH, RENDER_TARGET_HEIGHT);
             _upScaleAmount = (float)GraphicsDevice.PresentationParameters.BackBufferWidth / RENDER_TARGET_WIDTH;
+            
+            _font80 = Content.Load<SpriteFont>("Font80");
 
 
         }
@@ -109,16 +113,12 @@ namespace FightGameInterface {
         }
 
         protected override void Draw(GameTime gameTime) {
-            GraphicsDevice.Clear(Color.CornflowerBlue);
-
             // TODO: Add your drawing code here
             
             GraphicsDevice.SetRenderTarget(_scaleUpTarget);
             GraphicsDevice.Clear(Color.CornflowerBlue);
-            _spriteBatch.Begin(
-                SpriteSortMode.BackToFront,
-                BlendState.AlphaBlend
-            );
+            
+            _spriteBatch.Begin();
             
             // --------------------- DRAW HERE ---------------------
 
@@ -132,8 +132,8 @@ namespace FightGameInterface {
             // ------------------- STOP DRAWING --------------------
             
             _spriteBatch.End();
-            
-            
+
+
             GraphicsDevice.SetRenderTarget(null);
 
             _spriteBatch.Begin(
@@ -142,10 +142,12 @@ namespace FightGameInterface {
                 SamplerState.PointClamp );
             _spriteBatch.Draw(_scaleUpTarget, Vector2.Zero, null, Color.White, 0.0f, Vector2.Zero, _upScaleAmount, SpriteEffects.None, 0.0f);
             _spriteBatch.End();
-            
+
+            DrawTexts();
 
             base.Draw(gameTime);
-        }
+            
+        }         
 
         private void DrawInterface(Color color) {
             const int lineWidth = 3;
@@ -181,6 +183,31 @@ namespace FightGameInterface {
             _spriteBatch.Draw(actSprite, new Vector2(RENDER_TARGET_WIDTH / 4 * 3 - actSprite.Width / 2, 60), Color.White);
             
             Utils.Draw.DrawAroundSprite(_spriteBatch, actSprite, new Vector2(RENDER_TARGET_WIDTH / 4 * _actualChoice - actSprite.Width / 2, 60));
+        }
+
+        private void DrawTexts() {
+            
+            _spriteBatch.Begin();
+            switch (_gameState) {
+                case GameState.PlayerChoice:
+                    string output = "Healer";
+                    Vector2 fontOrigin = _font80.MeasureString(output) / 2;
+                    _spriteBatch.DrawString(_font80, output, new Vector2(_graphics.PreferredBackBufferWidth / 4 * 1, _graphics.PreferredBackBufferHeight * 0.62f) - fontOrigin, Color.Black);
+                    output = "Damager";
+                    fontOrigin = _font80.MeasureString(output) / 2;
+                    _spriteBatch.DrawString(_font80, output, new Vector2(_graphics.PreferredBackBufferWidth / 4 * 2, _graphics.PreferredBackBufferHeight * 0.62f) - fontOrigin, Color.Black);
+                    output = "Tank";
+                    fontOrigin = _font80.MeasureString(output) / 2;
+                    _spriteBatch.DrawString(_font80, output, new Vector2(_graphics.PreferredBackBufferWidth / 4 * 3, _graphics.PreferredBackBufferHeight * 0.62f) - fontOrigin, Color.Black);
+
+                    output = "Choose a Character";
+                    fontOrigin = _font80.MeasureString(output) / 2;
+                    _spriteBatch.DrawString(_font80, output, new Vector2(_graphics.PreferredBackBufferWidth / 2 * 1, _graphics.PreferredBackBufferHeight * 0.12f) - fontOrigin, Color.Brown);
+                    break;
+            }
+            
+            
+            _spriteBatch.End();
         }
     }
 }
