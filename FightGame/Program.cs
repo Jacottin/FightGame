@@ -21,7 +21,7 @@ namespace FightGame
             Console.WriteLine("Veuillez entrer votre nom.");
             string playerName = Console.ReadLine();
             
-            player =  new Healer(playerName);
+            player =  new Tank(playerName);
 
             // Character select
 

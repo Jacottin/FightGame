@@ -21,6 +21,11 @@ namespace FightGame.Characters {
             _defendPoints = other._defaultAttackPoints;
         }
 
+        public void SetActualDamage(int otherDamages)
+        {
+            _damages = otherDamages;
+        }
+        
         public void Update(Character other) {
             if (_specialCapacityUsed) {
                 _SpecialCapacity(other);
