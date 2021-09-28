@@ -1,1 +1,3 @@
 Source File,Dest File,Processor Type,Content Type,Source File Size,Dest File Size,Build Seconds
+"D:/dev/RiderProjects/FightGame/FightGameInterface/Content/assets/healthPoints1.png","D:/dev/RiderProjects/FightGame/FightGameInterface/Content/bin/DesktopGL/Content/assets/healthPoints1.xnb","TextureProcessor","Texture2DContent",336,3685,0,1220708
+"D:/dev/RiderProjects/FightGame/FightGameInterface/Content/assets/healthPoints2.png","D:/dev/RiderProjects/FightGame/FightGameInterface/Content/bin/DesktopGL/Content/assets/healthPoints2.xnb","TextureProcessor","Texture2DContent",337,3685,0,0011825

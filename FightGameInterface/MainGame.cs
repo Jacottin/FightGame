@@ -114,8 +114,8 @@ namespace FightGameInterface {
                 Content.Load<Texture2D>("assets/analystefinancier3")
             };
 
-            _heartFull = Content.Load<Texture2D>("assets/heart1");
-            _heartEmpty = Content.Load<Texture2D>("assets/heart2");
+            _heartFull = Content.Load<Texture2D>("assets/healthPoints1");
+            _heartEmpty = Content.Load<Texture2D>("assets/healthPoints2");
             
             _scaleUpTarget  = new RenderTarget2D(GraphicsDevice, RENDER_TARGET_WIDTH, RENDER_TARGET_HEIGHT);
             _upScaleAmount = (float)GraphicsDevice.PresentationParameters.BackBufferWidth / RENDER_TARGET_WIDTH;
@@ -190,7 +190,6 @@ namespace FightGameInterface {
                                         _player.LastAction = AttackType.Special;
                                         break;
                                 }
-                                _inGameState = InGameState.ExecuteAction;
 
                                 switch (_random.Next(1, 4)) {
                                     case 1:
@@ -212,21 +211,27 @@ namespace FightGameInterface {
                                 _npc.ComputeDamages();
                                 
                                 if (_player.getLife() > 0 && _npc.getLife() > 0) {
-                                    _inGameState = InGameState.PlayerAction;
+                                    
                                 }
                                 else if (_player.getLife() > _npc.getLife()) {
                                     _gameState = GameState.Win;
+                                    MediaPlayer.Stop();
                                 }
                                 else if (_player.getLife() == _npc.getLife()) {
                                     _gameState = GameState.Draw;
+                                    MediaPlayer.Stop();
                                 }
                                 else {
                                     _gameState = GameState.Defeat;
+                                    MediaPlayer.Stop();
                                 }
-                                MediaPlayer.Stop();
+                                
+                                _inGameState = InGameState.ExecuteAction;
                             }
                             break;
                         case InGameState.ExecuteAction:
+                            if (Utils.Keyboard.IsKeyDown(Keys.Enter))
+                                _inGameState = InGameState.PlayerAction;
                             break;
                     }
                     break;
@@ -508,21 +513,21 @@ namespace FightGameInterface {
         }
 
         private void DrawLife() {
-            Vector2 playerPos = new Vector2(RENDER_TARGET_WIDTH * 0.28f, RENDER_TARGET_HEIGHT * 0.48f);
+            Vector2 playerPos = new Vector2(RENDER_TARGET_WIDTH * 0.25f, RENDER_TARGET_HEIGHT * 0.47f);
             Vector2 npcPos = new Vector2(RENDER_TARGET_WIDTH * 0.65f, RENDER_TARGET_HEIGHT * 0.14f);
 
             for (int i = 0; i < _player.getLife(); i++) {
-                _spriteBatch.Draw(_heartFull, new Vector2(playerPos.X + i * _heartFull.Width * 0.08f, playerPos.Y) , null, Color.White, 0.0f, Vector2.Zero, 0.08f, SpriteEffects.None, 0.0f);
+                _spriteBatch.Draw(_heartFull, new Vector2(playerPos.X + i * _heartFull.Width, playerPos.Y) , null, Color.White, 0.0f, Vector2.Zero, 1, SpriteEffects.None, 0.0f);
             }
             for (int i = 0; i < _player.getTotalLife() - Math.Max(_player.getLife(), 0); i++) {
-                _spriteBatch.Draw(_heartEmpty, new Vector2( _heartFull.Width * 0.08f * Math.Max(_player.getLife(), 0) + playerPos.X + i * _heartEmpty.Width * 0.08f, playerPos.Y) , null, Color.White, 0.0f, Vector2.Zero, 0.08f, SpriteEffects.None, 0.0f);
+                _spriteBatch.Draw(_heartEmpty, new Vector2( _heartFull.Width * Math.Max(_player.getLife(), 0) + playerPos.X + i * _heartEmpty.Width, playerPos.Y) , null, Color.White, 0.0f, Vector2.Zero, 1, SpriteEffects.None, 0.0f);
             }
 
             for (int i = 0; i < _npc.getLife(); i++) {
-                _spriteBatch.Draw(_heartFull, new Vector2(npcPos.X - i * _heartFull.Width * 0.08f, npcPos.Y) , null, Color.White, 0.0f, Vector2.Zero, 0.08f, SpriteEffects.None, 0.0f);
+                _spriteBatch.Draw(_heartFull, new Vector2(npcPos.X - i * _heartFull.Width, npcPos.Y) , null, Color.White, 0.0f, Vector2.Zero, 1, SpriteEffects.None, 0.0f);
             }
             for (int i = 0; i < _npc.getTotalLife() - Math.Max(_npc.getLife(), 0); i++) {
-                _spriteBatch.Draw(_heartEmpty, new Vector2( npcPos.X - _heartFull.Width * 0.08f * Math.Max(_npc.getLife(), 0) - i * _heartEmpty.Width * 0.08f, npcPos.Y) , null, Color.White, 0.0f, Vector2.Zero, 0.08f, SpriteEffects.None, 0.0f);
+                _spriteBatch.Draw(_heartEmpty, new Vector2( npcPos.X - _heartFull.Width * Math.Max(_npc.getLife(), 0) - i * _heartEmpty.Width, npcPos.Y) , null, Color.White, 0.0f, Vector2.Zero, 1, SpriteEffects.None, 0.0f);
             }
         }
 
