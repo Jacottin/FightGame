@@ -13,6 +13,48 @@
 
 #---------------------------------- Content ---------------------------------#
 
+#begin assets/analystefinancier1.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:assets/analystefinancier1.png
+
+#begin assets/analystefinancier2.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:assets/analystefinancier2.png
+
+#begin assets/analystefinancier3.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:assets/analystefinancier3.png
+
+#begin assets/character_select.mp3
+/importer:Mp3Importer
+/processor:SongProcessor
+/processorParam:Quality=Best
+/build:assets/character_select.mp3
+
 #begin assets/damager1.png
 /importer:TextureImporter
 /processor:TextureProcessor
@@ -48,6 +90,12 @@
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
 /build:assets/damager3.png
+
+#begin assets/futureGrammyAwards.mp3
+/importer:Mp3Importer
+/processor:SongProcessor
+/processorParam:Quality=Best
+/build:assets/futureGrammyAwards.mp3
 
 #begin assets/healer1.png
 /importer:TextureImporter

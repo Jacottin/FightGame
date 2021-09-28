@@ -2,6 +2,7 @@
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using Microsoft.Xna.Framework.Media;
 using FightGame.Characters;
 
 namespace FightGameInterface {
@@ -14,6 +15,7 @@ namespace FightGameInterface {
         private Texture2D[] _tankSprites;
         private Texture2D[] _damagerSprites;
         private Texture2D[] _healerSprites;
+        private Texture2D[] _analystSprites;
 
         private Texture2D _heartFull;
         private Texture2D _heartEmpty;
@@ -31,19 +33,22 @@ namespace FightGameInterface {
         
         // ---------- PlayerChoice ----------
         private int _actualChoice;
+        private Song _songSelect;
         
         // ------------ In Game -------------
         private Character _npc;
         private InGameState _inGameState;
         private int _inGameChoice;
+        private Song _songPlay;
 
         private void ResetData() {
+            MediaPlayer.Play(_songSelect);
             _gameState = GameState.PlayerChoice;
             _inGameState = InGameState.PlayerAction;
             _player = new Healer("Default Player");
             _actualChoice = 1;
             _inGameChoice = 1;
-            switch (_random.Next(1, 4)) {
+            switch (_random.Next(1, 5)) {
                 case 1:
                     _npc = new Damager("NPC");
                     break;
@@ -52,6 +57,9 @@ namespace FightGameInterface {
                     break;
                 case 3:
                     _npc = new Tank("NPC");
+                    break;
+                case 4:
+                    _npc = new Analyst("NPC");
                     break;
                 default:
                     _npc = new Healer("DEFAULT NPC");
@@ -63,7 +71,6 @@ namespace FightGameInterface {
             _graphics = new GraphicsDeviceManager(this);
             Content.RootDirectory = "Content";
             IsMouseVisible = true;
-            ResetData();
         }
 
         protected override void Initialize() {
@@ -101,6 +108,11 @@ namespace FightGameInterface {
                 Content.Load<Texture2D>("assets/healer2"),
                 Content.Load<Texture2D>("assets/healer3")
             };
+            _analystSprites = new[] {
+                Content.Load<Texture2D>("assets/analystefinancier1"),
+                Content.Load<Texture2D>("assets/analystefinancier2"),
+                Content.Load<Texture2D>("assets/analystefinancier3")
+            };
 
             _heartFull = Content.Load<Texture2D>("assets/heart1");
             _heartEmpty = Content.Load<Texture2D>("assets/heart2");
@@ -109,8 +121,10 @@ namespace FightGameInterface {
             _upScaleAmount = (float)GraphicsDevice.PresentationParameters.BackBufferWidth / RENDER_TARGET_WIDTH;
             
             _font80 = Content.Load<SpriteFont>("Font80");
-
-
+            _songSelect = Content.Load<Song>("assets/character_select");
+            _songPlay = Content.Load<Song>("assets/futureGrammyAwards");
+            MediaPlayer.IsRepeating = true;
+            ResetData();
         }
 
         protected override void Update(GameTime gameTime) {
@@ -125,10 +139,10 @@ namespace FightGameInterface {
                         _actualChoice++;
                     if (Utils.Keyboard.IsKeyDown(Keys.Left))
                         _actualChoice--;
-                    if (_actualChoice > 3)
+                    if (_actualChoice > 4)
                         _actualChoice = 1;
                     if (_actualChoice < 1)
-                        _actualChoice = 3;
+                        _actualChoice = 4;
                     if (Utils.Keyboard.IsKeyDown(Keys.Enter)) {
                         switch (_actualChoice) {
                             case 1:
@@ -140,8 +154,13 @@ namespace FightGameInterface {
                             case 3:
                                 _player = new Tank("Player");
                                 break;
+                            case 4:
+                                _player = new Analyst("Player");
+                                break;
                         }
                         _gameState++;
+                        MediaPlayer.Stop();
+                        MediaPlayer.Play(_songPlay);
                     }
                     break;
                 case GameState.InGame:
@@ -191,10 +210,7 @@ namespace FightGameInterface {
                                 _npc.Update(_player);
                                 _player.ComputeDamages();
                                 _npc.ComputeDamages();
-                            }
-                            break;
-                        case InGameState.ExecuteAction:
-                            if (Utils.Keyboard.IsKeyDown(Keys.Enter)) {
+                                
                                 if (_player.getLife() > 0 && _npc.getLife() > 0) {
                                     _inGameState = InGameState.PlayerAction;
                                 }
@@ -207,7 +223,10 @@ namespace FightGameInterface {
                                 else {
                                     _gameState = GameState.Defeat;
                                 }
+                                MediaPlayer.Stop();
                             }
+                            break;
+                        case InGameState.ExecuteAction:
                             break;
                     }
                     break;
@@ -297,15 +316,18 @@ namespace FightGameInterface {
             
             Texture2D actSprite = _healerSprites[_actualChoice == 1 ? index : 0];
             
-            _spriteBatch.Draw(actSprite, new Vector2(RENDER_TARGET_WIDTH / 4 - actSprite.Width / 2, 60), Color.White);
+            _spriteBatch.Draw(actSprite, new Vector2(RENDER_TARGET_WIDTH / 5 - actSprite.Width / 2, 60), Color.White);
 
             actSprite = _damagerSprites[_actualChoice == 2 ? index : 0];
-            _spriteBatch.Draw(actSprite, new Vector2(RENDER_TARGET_WIDTH / 4 * 2 - actSprite.Width / 2, 60), Color.White);
+            _spriteBatch.Draw(actSprite, new Vector2(RENDER_TARGET_WIDTH / 5 * 2 - actSprite.Width / 2, 60), Color.White);
             
             actSprite = _tankSprites[_actualChoice == 3 ? index : 0];
-            _spriteBatch.Draw(actSprite, new Vector2(RENDER_TARGET_WIDTH / 4 * 3 - actSprite.Width / 2, 60), Color.White);
+            _spriteBatch.Draw(actSprite, new Vector2(RENDER_TARGET_WIDTH / 5 * 3 - actSprite.Width / 2, 60), Color.White);
             
-            Utils.Draw.DrawAroundSprite(_spriteBatch, new Vector2(RENDER_TARGET_WIDTH / 4 * _actualChoice - actSprite.Width / 2, 60), new Vector2(actSprite.Width, actSprite.Height));
+            actSprite = _analystSprites[_actualChoice == 4 ? index : 0];
+            _spriteBatch.Draw(actSprite, new Vector2(RENDER_TARGET_WIDTH / 5 * 4 - actSprite.Width / 2, 60), Color.White);
+            
+            Utils.Draw.DrawAroundSprite(_spriteBatch, new Vector2(RENDER_TARGET_WIDTH / 5 * _actualChoice - actSprite.Width / 2, 60), new Vector2(actSprite.Width, actSprite.Height));
         }
         
         private void DrawInGame(GameTime gameTime) {
@@ -321,6 +343,9 @@ namespace FightGameInterface {
                 case "Tank":
                     playerSprite = _tankSprites[index];
                     break;
+                case "Analyst":
+                    playerSprite = _analystSprites[index];
+                    break;
             }
             
             _spriteBatch.Draw(playerSprite, new Vector2(RENDER_TARGET_WIDTH / 5 - playerSprite.Width / 2, 80), Color.White);
@@ -335,6 +360,9 @@ namespace FightGameInterface {
                     break;
                 case "Tank":
                     npcSprite = _tankSprites[index];
+                    break;
+                case "Analyst":
+                    npcSprite = _analystSprites[index];
                     break;
             }
             _spriteBatch.Draw(npcSprite, new Rectangle(RENDER_TARGET_WIDTH / 5 * 4 - npcSprite.Width / 2, 30, 64, 64), 
@@ -368,17 +396,23 @@ namespace FightGameInterface {
                     output = "Healer";
                     fontOrigin = _font80.MeasureString(output) / 2;
                     _spriteBatch.DrawString(_font80, output,
-                        new Vector2(_graphics.PreferredBackBufferWidth / 4 * 1,
+                        new Vector2(_graphics.PreferredBackBufferWidth / 5 * 1,
                             _graphics.PreferredBackBufferHeight * 0.62f) - fontOrigin, Color.Black);
                     output = "Damager";
                     fontOrigin = _font80.MeasureString(output) / 2;
                     _spriteBatch.DrawString(_font80, output,
-                        new Vector2(_graphics.PreferredBackBufferWidth / 4 * 2,
+                        new Vector2(_graphics.PreferredBackBufferWidth / 5 * 2,
                             _graphics.PreferredBackBufferHeight * 0.62f) - fontOrigin, Color.Black);
                     output = "Tank";
                     fontOrigin = _font80.MeasureString(output) / 2;
                     _spriteBatch.DrawString(_font80, output,
-                        new Vector2(_graphics.PreferredBackBufferWidth / 4 * 3,
+                        new Vector2(_graphics.PreferredBackBufferWidth / 5 * 3,
+                            _graphics.PreferredBackBufferHeight * 0.62f) - fontOrigin, Color.Black);
+                    
+                    output = "Analyst";
+                    fontOrigin = _font80.MeasureString(output) / 2;
+                    _spriteBatch.DrawString(_font80, output,
+                        new Vector2(_graphics.PreferredBackBufferWidth / 5 * 4,
                             _graphics.PreferredBackBufferHeight * 0.62f) - fontOrigin, Color.Black);
 
                     output = "Choose a Character";
@@ -504,6 +538,9 @@ namespace FightGameInterface {
                     break;
                 case "Tank":
                     sprite = _tankSprites[index];
+                    break;
+                case "Analyst":
+                    sprite = _analystSprites[index];
                     break;
             }
             _spriteBatch.Draw(sprite, new Vector2(RENDER_TARGET_WIDTH / 2 - sprite.Width / 2, 90), Color.White);

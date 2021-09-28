@@ -8,10 +8,8 @@ namespace StatsSystem {
     class Program {
         static Random random = new Random();
         
-        [SuppressMessage("ReSharper.DPA", "DPA0002: Excessive memory allocations in SOH", MessageId = "type: FightGame.Characters.Tank; size: 106MB")]
-        [SuppressMessage("ReSharper.DPA", "DPA0002: Excessive memory allocations in SOH", MessageId = "type: FightGame.Characters.Damager; size: 102MB")]
+        [SuppressMessage("ReSharper.DPA", "DPA0002: Excessive memory allocations in SOH", MessageId = "type: FightGame.Characters.Tank")]
         [SuppressMessage("ReSharper.DPA", "DPA0002: Excessive memory allocations in SOH", MessageId = "type: FightGame.Characters.Healer")]
-        [SuppressMessage("ReSharper.DPA", "DPA0002: Excessive memory allocations in SOH", MessageId = "type: FightGame.Characters.Damager; size: 104MB")]
         [SuppressMessage("ReSharper.DPA", "DPA0002: Excessive memory allocations in SOH", MessageId = "type: FightGame.Characters.Damager")]
         static void Main(string[] args) {
             Console.WriteLine("How many simulation do you want ?");
@@ -22,14 +20,14 @@ namespace StatsSystem {
                     nbSimulation = int.Parse(Console.ReadLine()!);
                     break;
                 }
-                catch (Exception e) {
+                catch (Exception) {
                     Console.WriteLine("Please entry a valid number.");
                 }
             }
 
             Console.WriteLine("Processing...");
 
-            List<string> types = new List<string>{ "H", "D", "T" };
+            List<string> types = new List<string>{ "H", "D", "T", "A" };
             Dictionary<string, int> results = new Dictionary<string, int>();
             types.ForEach(x => types.ForEach(y => results.Add(x + y, 0)));
             
@@ -43,17 +41,21 @@ namespace StatsSystem {
                 if (IsWinning(new Healer("P1"), new Tank("P2"))) {
                     results["HT"]++;
                 }
+                // HEALER VS ANALYST
+                if (IsWinning(new Healer("P1"), new Analyst("P2"))) {
+                    results["HA"]++;
+                }
                 // DAMAGER VS HEALER
                 if (IsWinning(new Damager("P1"), new Healer("P2"))) {
                     results["DH"]++;
                 }
-                // DAMAGER VS DAMAGER
-                if (IsWinning(new Damager("P1"), new Damager("P2"))) {
-                     results["DD"]++;
-                }
                 // DAMAGER VS TANK
                 if (IsWinning(new Damager("P1"), new Tank("P2"))) {
                     results["DT"]++;
+                }
+                // DAMAGER VS ANALYST
+                if (IsWinning(new Damager("P1"), new Analyst("P2"))) {
+                    results["DA"]++;
                 }
                 // TANK VS HEALER
                 if (IsWinning(new Tank("P1"), new Healer("P2"))) {
@@ -63,9 +65,21 @@ namespace StatsSystem {
                 if (IsWinning(new Tank("P1"), new Damager("P2"))) {
                     results["TD"]++;
                 }
-                // TANK VS TANK
-                if (IsWinning(new Tank("P1"), new Tank("P2"))) {
-                    results["TT"]++;
+                // TANK VS ANALYST
+                if (IsWinning(new Tank("P1"), new Analyst("P2"))) {
+                    results["TA"]++;
+                }
+                // ANALYST VS HEALER
+                if (IsWinning(new Analyst("P1"), new Healer("P2"))) {
+                    results["AH"]++;
+                }
+                // ANALYST VS DAMAGER
+                if (IsWinning(new Analyst("P1"), new Damager("P2"))) {
+                    results["AD"]++;
+                }
+                // ANALYST VS TANK
+                if (IsWinning(new Analyst("P1"), new Tank("P2"))) {
+                    results["AT"]++;
                 }
             }
 
@@ -104,7 +118,7 @@ namespace StatsSystem {
             }
 
             int result = player1.getLife();
-            return player1.getLife() > 0;
+            return result > 0;
         }
 
         private static void DisplayResult(Dictionary<string, int> results, List<string> types, int nbTotal) {
