@@ -28,14 +28,13 @@ namespace FightGameInterface.Utils {
                 0);
         }
 
-        public static void DrawAroundSprite(SpriteBatch sb, Texture2D sprite, Vector2 pos) {
+        public static void DrawAroundSprite(SpriteBatch sb, Vector2 pos, Vector2 sprite, int offset = 10) {
             const int lineWidth = 3;
-            const int offset = 10;
-            
+
             Vector2 topLeft = new (pos.X - offset, pos.Y - offset);
-            Vector2 topRight = new( pos.X + sprite.Width + offset , pos.Y - offset);
-            Vector2 bottomLeft = new (pos.X - offset, pos.Y + sprite.Height + offset);
-            Vector2 bottomRight = new (pos.X + sprite.Width + offset, pos.Y + sprite.Height + offset);
+            Vector2 topRight = new( pos.X + sprite.X + offset , pos.Y - offset);
+            Vector2 bottomLeft = new (pos.X - offset, pos.Y + sprite.Y + offset);
+            Vector2 bottomRight = new (pos.X + sprite.X + offset, pos.Y + sprite.Y + offset);
 
             DrawLine(sb, topLeft, topRight, Color.White, lineWidth);
             DrawLine(sb, topRight, bottomRight, Color.White, lineWidth);

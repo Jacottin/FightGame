@@ -4,5 +4,11 @@ namespace FightGameInterface {
         InGame,
         Win,
         Defeat,
+        Draw
+    }
+
+    public enum InGameState {
+        PlayerAction,
+        ExecuteAction
     }
 }

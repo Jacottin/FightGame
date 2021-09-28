@@ -9,6 +9,8 @@ namespace FightGameInterface {
         private readonly GraphicsDeviceManager _graphics;
         private SpriteBatch _spriteBatch;
 
+        private Random _random = new Random();
+
         private Texture2D[] _tankSprites;
         private Texture2D[] _damagerSprites;
         private Texture2D[] _healerSprites;
@@ -32,12 +34,16 @@ namespace FightGameInterface {
         
         // ------------ In Game -------------
         private Character _npc;
+        private InGameState _inGameState;
+        private int _inGameChoice;
 
         private void ResetData() {
             _gameState = GameState.PlayerChoice;
+            _inGameState = InGameState.PlayerAction;
             _player = new Healer("Default Player");
             _actualChoice = 1;
-            switch (new Random().Next(1, 4)) {
+            _inGameChoice = 1;
+            switch (_random.Next(1, 4)) {
                 case 1:
                     _npc = new Damager("NPC");
                     break;
@@ -123,7 +129,7 @@ namespace FightGameInterface {
                         _actualChoice = 1;
                     if (_actualChoice < 1)
                         _actualChoice = 3;
-                    if (state.IsKeyDown(Keys.Enter)) {
+                    if (Utils.Keyboard.IsKeyDown(Keys.Enter)) {
                         switch (_actualChoice) {
                             case 1:
                                 _player = new Healer("Player");
@@ -137,6 +143,80 @@ namespace FightGameInterface {
                         }
                         _gameState++;
                     }
+                    break;
+                case GameState.InGame:
+                    switch (_inGameState) {
+                        case InGameState.PlayerAction:
+                            if (Utils.Keyboard.IsKeyDown(Keys.Left))
+                                _inGameChoice--;
+                            if (Utils.Keyboard.IsKeyDown(Keys.Right))
+                                _inGameChoice++;
+                            if (_inGameChoice > 3)
+                                _inGameChoice = 1;
+                            if (_inGameChoice < 1)
+                                _inGameChoice = 3;
+
+                            if (Utils.Keyboard.IsKeyDown(Keys.Enter)) {
+                                switch (_inGameChoice) {
+                                    case 1:
+                                        _player.Attack(_npc);
+                                        _player.LastAction = AttackType.Attack;
+                                        break;
+                                    case 2:
+                                        _player.Defend(_npc);
+                                        _player.LastAction = AttackType.Defend;
+                                        break;
+                                    case 3:
+                                        _player.SpecialCapacity();
+                                        _player.LastAction = AttackType.Special;
+                                        break;
+                                }
+                                _inGameState = InGameState.ExecuteAction;
+
+                                switch (_random.Next(1, 4)) {
+                                    case 1:
+                                        _npc.Attack(_player);
+                                        _npc.LastAction = AttackType.Attack;
+                                        break;
+                                    case 2:
+                                        _npc.Defend(_player);
+                                        _npc.LastAction = AttackType.Defend;
+                                        break;
+                                    case 3:
+                                        _npc.SpecialCapacity();
+                                        _npc.LastAction = AttackType.Special;
+                                        break;
+                                }
+                                _player.Update(_npc);
+                                _npc.Update(_player);
+                                _player.ComputeDamages();
+                                _npc.ComputeDamages();
+                            }
+                            break;
+                        case InGameState.ExecuteAction:
+                            if (Utils.Keyboard.IsKeyDown(Keys.Enter)) {
+                                if (_player.getLife() > 0 && _npc.getLife() > 0) {
+                                    _inGameState = InGameState.PlayerAction;
+                                }
+                                else if (_player.getLife() > _npc.getLife()) {
+                                    _gameState = GameState.Win;
+                                }
+                                else if (_player.getLife() == _npc.getLife()) {
+                                    _gameState = GameState.Draw;
+                                }
+                                else {
+                                    _gameState = GameState.Defeat;
+                                }
+                            }
+                            break;
+                    }
+                    break;
+                
+                case GameState.Defeat:
+                case GameState.Win:
+                case GameState.Draw:
+                    if (Utils.Keyboard.IsKeyDown(Keys.Enter))
+                        ResetData();
                     break;
             }
 
@@ -163,6 +243,12 @@ namespace FightGameInterface {
                     DrawInGame(gameTime);
                     DrawLife();
                     DrawInterface(Color.White);
+                    break;
+                
+                case GameState.Defeat:
+                case GameState.Win:
+                case GameState.Draw:
+                    DrawEndGame(gameTime);
                     break;
             }
 
@@ -219,7 +305,7 @@ namespace FightGameInterface {
             actSprite = _tankSprites[_actualChoice == 3 ? index : 0];
             _spriteBatch.Draw(actSprite, new Vector2(RENDER_TARGET_WIDTH / 4 * 3 - actSprite.Width / 2, 60), Color.White);
             
-            Utils.Draw.DrawAroundSprite(_spriteBatch, actSprite, new Vector2(RENDER_TARGET_WIDTH / 4 * _actualChoice - actSprite.Width / 2, 60));
+            Utils.Draw.DrawAroundSprite(_spriteBatch, new Vector2(RENDER_TARGET_WIDTH / 4 * _actualChoice - actSprite.Width / 2, 60), new Vector2(actSprite.Width, actSprite.Height));
         }
         
         private void DrawInGame(GameTime gameTime) {
@@ -253,6 +339,22 @@ namespace FightGameInterface {
             }
             _spriteBatch.Draw(npcSprite, new Rectangle(RENDER_TARGET_WIDTH / 5 * 4 - npcSprite.Width / 2, 30, 64, 64), 
                 null, Color.White, 0f,Vector2.Zero, SpriteEffects.FlipHorizontally, 0f);
+            
+            if (_inGameState == InGameState.PlayerAction)
+                switch (_inGameChoice) {
+                    case 1:
+                        Utils.Draw.DrawAroundSprite(_spriteBatch, new Vector2(RENDER_TARGET_WIDTH * 0.05f, 
+                            RENDER_TARGET_HEIGHT * 0.85f), _font80.MeasureString("1. Attack")/_upScaleAmount, 5);
+                        break;
+                    case 2:
+                        Utils.Draw.DrawAroundSprite(_spriteBatch, new Vector2(RENDER_TARGET_WIDTH * 0.35f, 
+                            RENDER_TARGET_HEIGHT * 0.85f), _font80.MeasureString("1. Defend")/_upScaleAmount, 5);
+                        break;
+                    case 3:
+                        Utils.Draw.DrawAroundSprite(_spriteBatch, new Vector2(RENDER_TARGET_WIDTH * 0.65f, 
+                            RENDER_TARGET_HEIGHT * 0.85f), _font80.MeasureString("1. Special")/_upScaleAmount, 5);
+                        break;
+                }
             
         }
 
@@ -300,8 +402,72 @@ namespace FightGameInterface {
                     _spriteBatch.DrawString(_font80, output,
                         new Vector2(_graphics.PreferredBackBufferWidth / 10 * 6,
                             _graphics.PreferredBackBufferHeight * 0.1f) - fontOrigin, Color.Black);
-                    break;
+
+                    switch (_inGameState) {
+                        case InGameState.PlayerAction:
+                            _spriteBatch.DrawString(_font80, "Choose an action :", 
+                                new Vector2(_graphics.PreferredBackBufferWidth * 0.05f, 
+                                    _graphics.PreferredBackBufferHeight * 0.7f), Color.Black);
+                            
+                            _spriteBatch.DrawString(_font80, "1. Attack", 
+                                new Vector2(_graphics.PreferredBackBufferWidth * 0.05f, 
+                                    _graphics.PreferredBackBufferHeight * 0.85f), Color.Black);
+                            _spriteBatch.DrawString(_font80, "2. Defend", 
+                                new Vector2(_graphics.PreferredBackBufferWidth * 0.35f, 
+                                    _graphics.PreferredBackBufferHeight * 0.85f), Color.Black);
+                            _spriteBatch.DrawString(_font80, "3. Special", 
+                                new Vector2(_graphics.PreferredBackBufferWidth * 0.65f, 
+                                    _graphics.PreferredBackBufferHeight * 0.85f), Color.Black);
+                            break;
+                        case InGameState.ExecuteAction:
+                            _spriteBatch.DrawString(_font80, _player.getUserName() + " used " + _player.LastAction, 
+                                new Vector2(_graphics.PreferredBackBufferWidth * 0.05f,
+                                    _graphics.PreferredBackBufferHeight * 0.73f), Color.Black);
+                            
+                            _spriteBatch.DrawString(_font80, _npc.getUserName() + " used " + _npc.LastAction, 
+                                new Vector2(_graphics.PreferredBackBufferWidth * 0.5f,
+                                    _graphics.PreferredBackBufferHeight * 0.85f), Color.Black);
+                            break;
+                    }
                     
+                    break;
+                // -------------------- END GAME ------------------------
+                case GameState.Win:
+                    output = "YOU WIN !";
+                    fontOrigin = _font80.MeasureString(output) / 2;
+                    _spriteBatch.DrawString(_font80, output, 
+                        new Vector2(_graphics.PreferredBackBufferWidth * 0.5f,
+                            _graphics.PreferredBackBufferHeight * 0.25f) - fontOrigin, Color.IndianRed);
+                    output = "Continue ?...";
+                    fontOrigin = _font80.MeasureString(output) / 2;
+                    _spriteBatch.DrawString(_font80, output, 
+                        new Vector2(_graphics.PreferredBackBufferWidth * 0.5f,
+                            _graphics.PreferredBackBufferHeight * 0.85f) - fontOrigin, Color.Black);
+                    break;
+                case GameState.Defeat:
+                    output = "YOU LOOSE...";
+                    fontOrigin = _font80.MeasureString(output) / 2;
+                    _spriteBatch.DrawString(_font80, output, 
+                        new Vector2(_graphics.PreferredBackBufferWidth * 0.5f,
+                            _graphics.PreferredBackBufferHeight * 0.25f) - fontOrigin, Color.IndianRed);
+                    output = "Continue ?...";
+                    fontOrigin = _font80.MeasureString(output) / 2;
+                    _spriteBatch.DrawString(_font80, output, 
+                        new Vector2(_graphics.PreferredBackBufferWidth * 0.5f,
+                            _graphics.PreferredBackBufferHeight * 0.85f) - fontOrigin, Color.Black);
+                    break;
+                case GameState.Draw:
+                    output = "IT'S A DRAW !";
+                    fontOrigin = _font80.MeasureString(output) / 2;
+                    _spriteBatch.DrawString(_font80, output, 
+                        new Vector2(_graphics.PreferredBackBufferWidth * 0.5f,
+                            _graphics.PreferredBackBufferHeight * 0.25f) - fontOrigin, Color.IndianRed);
+                    output = "Continue ?...";
+                    fontOrigin = _font80.MeasureString(output) / 2;
+                    _spriteBatch.DrawString(_font80, output, 
+                        new Vector2(_graphics.PreferredBackBufferWidth * 0.5f,
+                            _graphics.PreferredBackBufferHeight * 0.85f) - fontOrigin, Color.Black);
+                    break;
             }
 
             _spriteBatch.End();
@@ -314,18 +480,33 @@ namespace FightGameInterface {
             for (int i = 0; i < _player.getLife(); i++) {
                 _spriteBatch.Draw(_heartFull, new Vector2(playerPos.X + i * _heartFull.Width * 0.08f, playerPos.Y) , null, Color.White, 0.0f, Vector2.Zero, 0.08f, SpriteEffects.None, 0.0f);
             }
-            
-            for (int i = 0; i < _player.getTotalLife() - _player.getLife(); i++) {
-                _spriteBatch.Draw(_heartEmpty, new Vector2( _heartFull.Width * 0.08f * _player.getLife() + playerPos.X + i * _heartEmpty.Width * 0.08f, playerPos.Y) , null, Color.White, 0.0f, Vector2.Zero, 0.08f, SpriteEffects.None, 0.0f);
+            for (int i = 0; i < _player.getTotalLife() - Math.Max(_player.getLife(), 0); i++) {
+                _spriteBatch.Draw(_heartEmpty, new Vector2( _heartFull.Width * 0.08f * Math.Max(_player.getLife(), 0) + playerPos.X + i * _heartEmpty.Width * 0.08f, playerPos.Y) , null, Color.White, 0.0f, Vector2.Zero, 0.08f, SpriteEffects.None, 0.0f);
             }
-            
+
             for (int i = 0; i < _npc.getLife(); i++) {
                 _spriteBatch.Draw(_heartFull, new Vector2(npcPos.X - i * _heartFull.Width * 0.08f, npcPos.Y) , null, Color.White, 0.0f, Vector2.Zero, 0.08f, SpriteEffects.None, 0.0f);
             }
-            
-            for (int i = 0; i < _npc.getTotalLife() - _npc.getLife(); i++) {
-                _spriteBatch.Draw(_heartEmpty, new Vector2( npcPos.X - _heartFull.Width * 0.08f * _npc.getLife() - i * _heartEmpty.Width * 0.08f, npcPos.Y) , null, Color.White, 0.0f, Vector2.Zero, 0.08f, SpriteEffects.None, 0.0f);
+            for (int i = 0; i < _npc.getTotalLife() - Math.Max(_npc.getLife(), 0); i++) {
+                _spriteBatch.Draw(_heartEmpty, new Vector2( npcPos.X - _heartFull.Width * 0.08f * Math.Max(_npc.getLife(), 0) - i * _heartEmpty.Width * 0.08f, npcPos.Y) , null, Color.White, 0.0f, Vector2.Zero, 0.08f, SpriteEffects.None, 0.0f);
             }
+        }
+
+        private void DrawEndGame(GameTime gameTime) {
+            int index = (int)gameTime.TotalGameTime.TotalMilliseconds / 200 % 3;
+            Texture2D sprite = _healerSprites[0];
+            switch (_player.getClassName()) {
+                case "Healer":
+                    sprite = _healerSprites[index];
+                    break;
+                case "Damager":
+                    sprite = _damagerSprites[index];
+                    break;
+                case "Tank":
+                    sprite = _tankSprites[index];
+                    break;
+            }
+            _spriteBatch.Draw(sprite, new Vector2(RENDER_TARGET_WIDTH / 2 - sprite.Width / 2, 90), Color.White);
         }
     }
 }
