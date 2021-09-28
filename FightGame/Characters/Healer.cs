@@ -18,7 +18,7 @@ namespace FightGame.Characters {
         
         protected override void _SpecialCapacity(Character other) {
             ++_lifePoints;
-            _lifePoints = Math.Max(_totalLifePoints, _lifePoints);
+            _lifePoints = Math.Min(_totalLifePoints, _lifePoints);
         }
     }
 }
