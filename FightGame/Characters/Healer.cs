@@ -1,4 +1,6 @@
-﻿namespace FightGame.Characters {
+﻿using System;
+
+namespace FightGame.Characters {
     public class Healer : Character {
 
         public Healer(string playerName) {
@@ -16,6 +18,7 @@
         
         protected override void _SpecialCapacity(Character other) {
             ++_lifePoints;
+            _lifePoints = Math.Max(_totalLifePoints, _lifePoints);
         }
     }
 }
