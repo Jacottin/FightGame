@@ -5,6 +5,7 @@ namespace FightGame.Characters {
         protected string _className;
         protected string _userName;
         protected int _lifePoints;
+        protected int _totalLifePoints;
         protected int _defendPoints;
         protected int _defaultAttackPoints;
         protected int _attackPoints;
@@ -55,6 +56,10 @@ namespace FightGame.Characters {
 
         public int getLife() {
             return _lifePoints;
+        }
+
+        public int getTotalLife() {
+            return _totalLifePoints;
         }
         
         public void setLastAction(AttackType action) {

@@ -5,6 +5,7 @@
             _className = "Healer";
             _userName = playerName;
             _lifePoints = 4;
+            _totalLifePoints = _lifePoints;
             _defendPoints = 0;
             _attackPoints = 1;
             _defaultAttackPoints = _attackPoints;
