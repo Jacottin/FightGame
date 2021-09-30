@@ -1,6 +1,10 @@
 ﻿namespace FightGame.Characters {
     public class Tank : Character {
-
+        /*
+         * The tank has 5 life points, 1 attack point
+         * and his special attack adds 1 temporary attack
+         * point against 1 life point.
+         */
         public Tank(string playerName) {
             _className = "Tank";
             _userName = playerName;

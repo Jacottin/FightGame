@@ -85,6 +85,8 @@ namespace StatsSystem {
 
             DisplayResult(results, types, nbSimulation);
 
+            Console.ReadLine();
+
         }
 
         private static bool IsWinning(Character player1, Character player2) {

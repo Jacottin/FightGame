@@ -2,6 +2,11 @@ using System;
 
 namespace FightGame.Characters {
     public class Analyst : Character {
+        /*
+         * The analyst has 3 life points, 1 attack point
+         * and his special attack is able to reproduce
+         * his opponent's attack by improving it.
+         */
         public Analyst(string playerName) {
             
             _className = "Analyst";

@@ -2,6 +2,11 @@
 
 namespace FightGame.Characters {
     public abstract class Character {
+        /*
+         * Character is an abstract class describing the general behavior
+         * of a playable character, providing a set of methods necessary
+         * for the proper conduct of a game.
+         */
         protected string _className;
         protected string _userName;
         protected int _lifePoints;

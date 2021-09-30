@@ -1,0 +1,35 @@
+Ceci est la réalisation du défi de l'USRS45 par :
+    - Romain Lavidalie
+    - Florent Bascoul
+    - Stanis Kapusta
+
+Le but du projet était de réaliser en équipe de 3 un jeu de combat
+en tour par tour, dans le langage C#, en console, en respectant un
+cahier des charges.
+
+Le déroulement d'une partie se fait de la manière suivante :
+Tout d'abord, le joueur choisis une classe de personnages parmi les
+4 proposées. Le Healer, le Damager et le Tank étaient imposé, et 
+nous avons décidés de rajouter une quatrième classe, l'Analyste
+Financier.
+À chaque tour, le joueur choisis une action a effectuer. Soit 
+attaquer, soit défendre, soit utiliser son attaque spéciale. Chaque
+attaque spéciale à sa particularité. Pour l'Analyste Financier, nous
+lui avons donné la capacités de copier le spécial de son adversaire 
+tout en l'améliorant. Il reste cependant innefficace face à un autre
+Analyste.
+
+Les résultats de chaques tour sont appliqué en simultané avant de 
+passer au tour suivant.
+
+BONUS
+
+Le jeu est jouable à partir d'une interface graphique sous Monogame,
+une implémentation du Framework XNA de Microsoft. Un système de 
+statistique est également présent, permettant de visuellement se 
+représenter l'équilibrage du jeu. Chacun des deux exécutable 
+communiquent avec la même bibliothèque qui fourni l'ensemble des 
+classes nécessaire à la simulation d'une partie. 
+
+Chaque exécutable sera disponible dans le dossier build et dans les 
+sous dossiers correspondant.

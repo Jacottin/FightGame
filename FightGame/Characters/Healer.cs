@@ -2,7 +2,11 @@
 
 namespace FightGame.Characters {
     public class Healer : Character {
-
+        /*
+         * The healer has 4 life points, 1 attack point
+         * and his special attack returns the same amount
+         * of damage to his opponent.
+         */
         public Healer(string playerName) {
             _className = "Healer";
             _userName = playerName;
