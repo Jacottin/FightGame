@@ -2,15 +2,21 @@
 
 namespace FightGame.Characters {
     public abstract class Character {
+        /*
+         * Character is an abstract class describing the general behavior
+         * of a playable character, providing a set of methods necessary
+         * for the proper conduct of a game.
+         */
         protected string _className;
         protected string _userName;
         protected int _lifePoints;
+        protected int _totalLifePoints;
         protected int _defendPoints;
         protected int _defaultAttackPoints;
         protected int _attackPoints;
         protected int _damages;
         private bool _specialCapacityUsed;
-        private AttackType _lastAction;
+        public AttackType LastAction;
         
         
         public void Attack(Character other) {
@@ -56,23 +62,9 @@ namespace FightGame.Characters {
         public int getLife() {
             return _lifePoints;
         }
-        
-        public void setLastAction(AttackType action) {
-            _lastAction = action;
-        }
 
-        public void actionDisplay() {
-            switch (_lastAction) {
-                case AttackType.Attack:
-                    Console.WriteLine($"{_userName} attaque !");
-                    break;
-                case AttackType.Defend:
-                    Console.WriteLine($"{_userName} se défend !");
-                    break;
-                case AttackType.Special:
-                    Console.WriteLine($"{_userName} utilise sa capacité spéciale !");
-                    break;
-            }
+        public int getTotalLife() {
+            return _totalLifePoints;
         }
 
         protected abstract void _SpecialCapacity(Character other);
